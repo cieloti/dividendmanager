@@ -2,8 +2,8 @@
 //  Stocks.swift
 //  DividendManager
 //
-//  Created by Kang Minwoo on 2020/02/18.
-//  Copyright © 2020 Kang Minwoo. All rights reserved.
+//  Created by cieloti on 2020/02/01.
+//  Copyright © 2020 cieloti. All rights reserved.
 //
 
 import SwiftUI
