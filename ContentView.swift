@@ -23,16 +23,19 @@ struct ContentView: View {
                 Text("\(Constants.TabBarText.tabBar0)")
             }).tag(0)
             
-            AssetView(stocks:stocks).tabItem({
+            AssetView().tabItem({
                 Image(Constants.TabBarImageName.tabBar1)
                 Text("\(Constants.TabBarText.tabBar1)")
-                }).tag(1)
+                }).tag(1).environmentObject(stocks)
         }
     }
 }
 
+#if false
+var items = Stocks()
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(items)
     }
 }
+#endif

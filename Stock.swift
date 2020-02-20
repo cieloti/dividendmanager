@@ -8,30 +8,25 @@
 
 import SwiftUI
 
-struct Stock: Identifiable {
+class Stock: Identifiable {
     var id: String = UUID().uuidString
     var ticker: String
     var price: Double
     var dividend: String
     var period: String
     
-    init(ticker: String) {
+    init(ticker: String, price: Double, dividend: String, period: String) {
         self.ticker = ticker
-        self.price = 0.0
-        self.dividend = "0%"
-        self.period = "Quater"
+        self.price = price
+        self.dividend = dividend
+        self.period = period
     }
 }
 
 let testData = [
-    Stock(ticker: "AAPL"),
-    Stock(ticker: "GOOG")
-//    Stock(ticker: "GOOG", price: 1456, dividend: "3%", period: "Quarter"),
-//    Stock(ticker: "AMZN", price: 2000, dividend: "3%", period: "Quarter"),
-//    Stock(ticker: "AAPL", price: 315, dividend: "3%", period: "Quarter"),
-//    Stock(ticker: "GOOG", price: 1456, dividend: "3%", period: "Quarter"),
-//    Stock(ticker: "AMZN", price: 2000, dividend: "3%", period: "Quarter"),
-//    Stock(ticker: "AAPL",  price: 315, dividend: "3%", period: "Quarter"),
+    Stock(ticker: "GOOG", price: 1456, dividend: "3%", period: "Quarter"),
+    Stock(ticker: "AMZN", price: 2000, dividend: "3%", period: "Quarter"),
+    Stock(ticker: "AAPL", price: 315, dividend: "3%", period: "Quarter")
 ]
 
 struct StockView: View {
