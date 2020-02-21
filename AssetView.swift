@@ -20,35 +20,33 @@ struct AssetView: View {
     @State private var editedItem = ""
 //    @EnvironmentObject var stocks: Stocks
     @State private var stocks: [Stock] = []
-//    var stocks = testData
+    let yahooData = YahooData()
     
     var body: some View {
         NavigationView {
-            VStack {
-                HStack(alignment: .top, spacing: 15) {
-                    TextField("Add New Item", text: $newItem)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    Button("Add") {
-                        if !self.newItem.isEmpty {
-                            //                            self.stocks.items.append(Stock(ticker: self.newItem.ticker))
-//                            self.stocks.append(Stock(ticker: self.newItem.ticker))
-                            self.stocks.append(initData(ticker: self.newItem.uppercased()))
-                            self.newItem = ""
-                            print("size \(self.stocks.count)")
+            Form {
+                Section(header: Text(Constants.AssetText.assetTicker)) {
+                    HStack(alignment: .top, spacing: 15) {
+                        TextField("Add New Item", text: $newItem)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Button("Add") {
+                            if !self.newItem.isEmpty {
+                                self.stocks.append(self.yahooData.getData(ticker:self.newItem.uppercased()))
+                                self.newItem = ""
+                                print("size \(self.stocks.count)")
+                            }
                         }
+                        .padding(.horizontal, 10.0)
                     }
                 }
-                //                List(stocks.items
-                List(stocks) { stock in
-                    StockView(stock: stock)
+                Section(header: Text(Constants.AssetText.assetList)) {
+                    List(stocks) { stock in
+                        StockView(stock: stock)
+                    }
                 }
             }
-            .navigationBarTitle(Text("종목명           가격        배당금      배당률 "), displayMode: .inline)
+            .navigationBarTitle(Text(Constants.AssetText.assetNavigation), displayMode: .inline)
         }
-    }
-    
-    func delete(at offsets: IndexSet) {
-        print("delete button click")
     }
 }
 
@@ -60,45 +58,3 @@ struct AssetView_Previews: PreviewProvider {
     }
 }
 #endif
-
-func initData(ticker:String) -> Stock {
-    var presentValue = 0.0
-    var dividend = ""
-    var dividendRatio = ""
-    
-    if let url = URL(string:"https://finance.yahoo.com/quote/\(ticker)?p=\(ticker)") {
-        do {
-            let contents = try String(contentsOf: url)
-            let doc: Document = try SwiftSoup.parse(contents)
-            let elements = try doc.getAllElements()
-            for element in elements {
-                switch element.tagName() {
-                case "span":
-                    let e1:Elements = try! element.getElementsByClass("Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)")
-                    if e1.size() != 0 {
-                        print(try! element.text())
-                        presentValue = Double(try! element.text()) ?? 0
-//                        print(presentValue)
-                    }
-                    break
-                case "td":
-                    let e2:Elements = try! element.getElementsByAttributeValue("data-test", "DIVIDEND_AND_YIELD-value")
-                    if e2.size() != 0 {
-                        print(try! element.text())
-                        dividend = String((try! element.text()).split(separator: " ")[0])
-                        dividendRatio = String(String((try! element.text()).split(separator: " ")[1]).dropFirst().dropLast())
-//                        print("div = \(dividend)")
-//                        print("divratio = \(dividendRatio)")
-                    }
-                    break
-                default:
-                    let _ = 1
-                }
-            }
-        } catch {
-            print("url contents fail")
-        }
-    }
-//    print("ticker \(ticker) dividend : \(dividend)")
-    return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio)
-}

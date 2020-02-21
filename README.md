@@ -1,1 +1,2 @@
-# dividendmanager
+배당금 관리 앱
+SwifUI 학습 및 배당금 관리를 위한 앱을 만들어 보려고 한다.
