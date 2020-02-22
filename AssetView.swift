@@ -13,12 +13,9 @@ import SwiftSoup
 struct AssetView: View {
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Georgia-Bold", size: 20)!]
-//        self.stocks = defaults.object(forKey: "test") as? [Stock] ?? [Stock]()
     }
     
     @State private var newItem = ""
-    @State private var showEditTextField = false
-    @State private var editedItem = ""
     @ObservedObject var stocks = Stocks()
 //    @EnvironmentObject var stocks: Stocks
 //    @State private var stocks: [Stock] = []
@@ -37,8 +34,6 @@ struct AssetView: View {
                             if !self.newItem.isEmpty {
                                 self.stocks.items.append(self.yahooData.getData(ticker:self.newItem.uppercased()))
                                 self.newItem = ""
-                                // print("size \(self.stocks.count)")
-//                                self.defaults.set(self.stocks, forKey: "test")
                             }
                         }
                         .padding(.horizontal, 10.0)
