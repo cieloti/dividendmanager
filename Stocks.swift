@@ -6,8 +6,8 @@
 //  Copyright © 2020 cieloti. All rights reserved.
 //
 
-import SwiftUI
-
-class Stocks: ObservableObject {
-    @Published var items: [Stock] = []
-}
+//import SwiftUI
+//
+//class Stocks: ObservableObject {
+//    @Published var items: [Stock] = []
+//}

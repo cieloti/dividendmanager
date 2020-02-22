@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-class Stock: Identifiable {
+struct Stock: Identifiable, Hashable {
     var id: String = UUID().uuidString
     var ticker: String
     var price: Double
@@ -21,6 +21,34 @@ class Stock: Identifiable {
         self.dividend = dividend
         self.period = period
     }
+    
+    /*
+    enum CodingKeys: String, CodingKey {
+        case id
+        case ticker
+        case price
+        case dividend
+        case period
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(String.self, forKey: .id)
+        ticker = try values.decode(String.self, forKey: .ticker)
+        price = try values.decode(Double.self, forKey: .price)
+        dividend = try values.decode(String.self, forKey: .dividend)
+        period = try values.decode(String.self, forKey: .period)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(ticker, forKey: .ticker)
+        try container.encode(price, forKey: .price)
+        try container.encode(dividend, forKey: .dividend)
+        try container.encode(period, forKey: .period)
+    }
+ */
 }
 
 let testData = [
@@ -47,6 +75,9 @@ struct StockView: View {
                 .frame(width: 80, alignment: .leading)
                 .lineLimit(1)
         }
-        .padding(.all)
     }
+}
+
+class Stocks: ObservableObject {
+    @Published var items = [Stock]()
 }

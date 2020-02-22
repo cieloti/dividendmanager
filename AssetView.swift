@@ -13,14 +13,18 @@ import SwiftSoup
 struct AssetView: View {
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Georgia-Bold", size: 20)!]
+//        self.stocks = defaults.object(forKey: "test") as? [Stock] ?? [Stock]()
     }
     
     @State private var newItem = ""
     @State private var showEditTextField = false
     @State private var editedItem = ""
+    @ObservedObject var stocks = Stocks()
 //    @EnvironmentObject var stocks: Stocks
-    @State private var stocks: [Stock] = []
+//    @State private var stocks: [Stock] = []
+
     let yahooData = YahooData()
+    let defaults = UserDefaults.standard
     
     var body: some View {
         NavigationView {
@@ -31,9 +35,10 @@ struct AssetView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Button(Constants.AssetText.assetAdd) {
                             if !self.newItem.isEmpty {
-                                self.stocks.append(self.yahooData.getData(ticker:self.newItem.uppercased()))
+                                self.stocks.items.append(self.yahooData.getData(ticker:self.newItem.uppercased()))
                                 self.newItem = ""
                                 // print("size \(self.stocks.count)")
+//                                self.defaults.set(self.stocks, forKey: "test")
                             }
                         }
                         .padding(.horizontal, 10.0)
@@ -54,20 +59,32 @@ struct AssetView: View {
                             .frame(width: 80, alignment: .leading)
                             .lineLimit(1)
                     }
-                    .padding(.all)
-                    List(stocks) { stock in
-                        NavigationLink(destination: AssetDetailView(stock: stock)) {
-                            StockView(stock: stock)
+                    List {
+                        ForEach(stocks.items, id:\.self) { stock in
+                            NavigationLink(destination: AssetDetailView(stock: stock)) {
+                                StockView(stock: stock)
+                            }
                         }
+                        .onDelete(perform: removeItems)
                     }
                 }
             }
             .navigationBarTitle(Text(Constants.AssetText.assetNavigation), displayMode: .inline)
+//            .navigationBarItems(trailing: Button(action: {
+//                let s = Stock(ticker: "1", price: 0.0, dividend: "", period: "")
+//                self.stocks.items.append(s)
+//            }){
+//                Image(systemName: "plus")
+//            })
         }
+    }
+
+    func removeItems(at offsets: IndexSet) {
+        stocks.items.remove(atOffsets:offsets)
     }
 }
 
-#if true
+#if false
 var stocks = Stocks()
 struct AssetView_Previews: PreviewProvider {
     static var previews: some View {
