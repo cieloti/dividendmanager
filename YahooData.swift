@@ -23,7 +23,7 @@ class YahooData {
                     case "span":
                         let e1:Elements = try! element.getElementsByClass("Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)")
                         if e1.size() != 0 {
-                            print(try! element.text())
+                            //print(try! element.text())
                             presentValue = Double(try! element.text()) ?? 0
     //                        print(presentValue)
                         }
@@ -31,7 +31,7 @@ class YahooData {
                     case "td":
                         let e2:Elements = try! element.getElementsByAttributeValue("data-test", "DIVIDEND_AND_YIELD-value")
                         if e2.size() != 0 {
-                            print(try! element.text())
+                            //print(try! element.text())
                             dividend = String((try! element.text()).split(separator: " ")[0])
                             dividendRatio = String(String((try! element.text()).split(separator: " ")[1]).dropFirst().dropLast())
     //                        print("div = \(dividend)")

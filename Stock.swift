@@ -33,29 +33,20 @@ struct StockView: View {
     let stock: Stock
     
     var body: some View {
-        HStack(spacing: 15) {
+        HStack {
             Text(stock.ticker)
-                .frame(width: 80, alignment: .center)
+                .frame(width: 80, alignment: .leading)
                 .lineLimit(1)
             Text(String(format: "%.2f", stock.price))
-                .frame(width: 100, alignment: .center)
+                .frame(width: 80, alignment: .leading)
                 .lineLimit(1)
             Text("\(stock.dividend)")
-                .frame(width: 60, alignment: .center)
+                .frame(width: 80, alignment: .leading)
                 .lineLimit(1)
             Text("\(stock.period)")
-                .frame(width: 60, alignment: .center)
+                .frame(width: 80, alignment: .leading)
                 .lineLimit(1)
         }
-        .padding([.leading, .bottom], 13)
-        .padding(.trailing, 15)
-        
-    }
-}
-
-struct DetailView:View {
-    var select: String
-    var body: some View {
-        Text(select)
+        .padding(.all)
     }
 }

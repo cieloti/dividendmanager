@@ -22,7 +22,9 @@ struct Constants {
     
     struct AssetText {
         static let assetTicker = "종목의 Ticker를 입력하세요"
-        static let assetList = "종목명     가격     배당금    배당률"
-        static let assetNavigation = "총 자산 : "
+        static let assetList = "종목 리스트"
+        static let assetNavigation = "자산 현황"
+        static let assetAddNewItem = "Add New Item"
+        static let assetAdd = "Add"
     }
 }
