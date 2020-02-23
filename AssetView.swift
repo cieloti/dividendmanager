@@ -16,6 +16,7 @@ struct AssetView: View {
     }
     
     @State private var newItem = ""
+    @State private var number = ""
     @ObservedObject var stocks = Stocks()
 //    @EnvironmentObject var stocks: Stocks
 //    @State private var stocks: [Stock] = []
@@ -30,10 +31,13 @@ struct AssetView: View {
                     HStack() {
                         TextField(Constants.AssetText.assetAddNewItem, text: $newItem)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                        TextField(Constants.AssetText.assetNumber, text: $number)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                         Button(Constants.AssetText.assetAdd) {
                             if !self.newItem.isEmpty {
-                                self.stocks.items.append(self.yahooData.getData(ticker:self.newItem.uppercased()))
+                                self.stocks.items.append(self.yahooData.getData(ticker:self.newItem.uppercased(), number:self.number))
                                 self.newItem = ""
+                                self.number = ""
                             }
                         }
                         .padding(.horizontal, 10.0)
@@ -41,17 +45,17 @@ struct AssetView: View {
                 }
                 Section(header: Text(Constants.AssetText.assetList)) {
                     HStack {
-                        Text("종목명")
+                        Text(Constants.AssetText.assetListTicker)
                             .frame(width: 80, alignment: .leading)
                             .lineLimit(1)
-                        Text("가격")
-                            .frame(width: 80, alignment: .leading)
+                        Text(Constants.AssetText.assetListPrice)
+                            .frame(width: 80, alignment: .center)
                             .lineLimit(1)
-                        Text("배당금")
-                            .frame(width: 80, alignment: .leading)
+                        Text(Constants.AssetText.assetListDividend)
+                            .frame(width: 80, alignment: .center)
                             .lineLimit(1)
-                        Text("배당률")
-                            .frame(width: 80, alignment: .leading)
+                        Text(Constants.AssetText.assetListNumber)
+                            .frame(width: 80, alignment: .center)
                             .lineLimit(1)
                     }
                     List {

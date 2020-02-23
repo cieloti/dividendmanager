@@ -24,7 +24,12 @@ struct Constants {
         static let assetTicker = "종목의 Ticker를 입력하세요"
         static let assetList = "종목 리스트"
         static let assetNavigation = "자산 현황"
-        static let assetAddNewItem = "Add New Item"
-        static let assetAdd = "Add"
+        static let assetAddNewItem = "종목 입력"
+        static let assetNumber = "주식 수량"
+        static let assetAdd = "추가"
+        static let assetListTicker = "종목명"
+        static let assetListPrice = "가격"
+        static let assetListDividend = "주당배당금"
+        static let assetListNumber = "주식수"
     }
 }

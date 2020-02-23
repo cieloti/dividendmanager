@@ -14,12 +14,24 @@ struct Stock: Identifiable, Hashable, Codable {
     var price: Double
     var dividend: String
     var period: String
+    var number: Int
+    var volume: String
+    var per: Double
+    var exdividend: String
     
-    init(ticker: String, price: Double, dividend: String, period: String) {
+    init(ticker: String, price: Double, dividend: String, period: String, number:Int, volume:String, per:Double, exdividend:String) {
         self.ticker = ticker
         self.price = price
         self.dividend = dividend
         self.period = period
+        if number <= 0 {
+            self.number = 0
+        } else {
+            self.number = number
+        }
+        self.volume = volume
+        self.per = per
+        self.exdividend = exdividend
     }
 }
 
@@ -32,20 +44,14 @@ struct StockView: View {
                 .frame(width: 80, alignment: .leading)
                 .lineLimit(1)
             Text(String(format: "%.2f", stock.price))
-                .frame(width: 80, alignment: .leading)
+                .frame(width: 80, alignment: .center)
                 .lineLimit(1)
             Text("\(stock.dividend)")
-                .frame(width: 80, alignment: .leading)
+                .frame(width: 80, alignment: .center)
                 .lineLimit(1)
-            Text("\(stock.period)")
-                .frame(width: 80, alignment: .leading)
+            Text("\(stock.number)")
+                .frame(width: 80, alignment: .center)
                 .lineLimit(1)
         }
     }
 }
-
-let testData = [
-    Stock(ticker: "GOOG", price: 1456, dividend: "3%", period: "Quarter"),
-    Stock(ticker: "AMZN", price: 2000, dividend: "3%", period: "Quarter"),
-    Stock(ticker: "AAPL", price: 315, dividend: "3%", period: "Quarter")
-]

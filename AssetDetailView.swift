@@ -13,6 +13,7 @@ struct AssetDetailView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
+            Spacer()
             HStack {
                 Text("종목명")
                 Spacer()
@@ -40,13 +41,25 @@ struct AssetDetailView: View {
             HStack {
                 Text("시가총액")
                 Spacer()
-                Text(stock.period)
+                Text(stock.volume)
             }
             .padding(.all, 5)
             HStack {
                 Text("PER")
                 Spacer()
-                Text(stock.period)
+                Text(String(format: "%.2f", stock.per))
+            }
+            .padding(.all, 5)
+            HStack {
+                Text("배당락일")
+                Spacer()
+                Text(stock.exdividend)
+            }
+            .padding(.all, 5)
+            HStack {
+                Text("주식수")
+                Spacer()
+                Text("\(stock.number)")
             }
             .padding(.all, 5)
         }
@@ -54,8 +67,8 @@ struct AssetDetailView: View {
     }
 }
 
-#if true
-var stock = Stock(ticker: "", price: 0.0, dividend: "", period: "")
+#if false
+var stock = Stock(ticker: "", price: 0.0, dividend: "", period: "", number: 0)
 struct AssetDetailView_Previews: PreviewProvider {
     static var previews: some View {
         AssetDetailView(stock: stock)
