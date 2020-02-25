@@ -21,7 +21,7 @@ struct ContentView: View {
             HomeView().tabItem({
                 Image(Constants.TabBarImageName.tabBar0)
                 Text("\(Constants.TabBarText.tabBar0)")
-            }).tag(0)
+                }).tag(0).environmentObject(stocks)
             
             AssetView().tabItem({
                 Image(Constants.TabBarImageName.tabBar1)

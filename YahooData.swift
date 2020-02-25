@@ -10,7 +10,7 @@ import SwiftSoup
 class YahooData {
     func getData(ticker:String, number:String) -> Stock {
         var presentValue = 0.0
-        var dividend = ""
+        var dividend = 0.0
         var dividendRatio = ""
         var volume = ""
         var per = 0.0
@@ -27,13 +27,13 @@ class YahooData {
                     case "span":
                         let e1:Elements = try! element.getElementsByClass("Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)")
                         if e1.size() != 0 {
-                            presentValue = Double(try! element.text()) ?? 0
+                            presentValue = Double(String(try! element.text()).replacingOccurrences(of: ",", with: "")) ?? 0
                         }
                         break
                     case "td":
                         let e2:Elements = try! element.getElementsByAttributeValue("data-test", "DIVIDEND_AND_YIELD-value")
                         if e2.size() != 0 {
-                            dividend = String((try! element.text()).split(separator: " ")[0])
+                            dividend = Double(String((try! element.text()).split(separator: " ")[0]).replacingOccurrences(of: ",", with: "")) ?? 0
                             dividendRatio = String(String((try! element.text()).split(separator: " ")[1]).dropFirst().dropLast())
                         }
                         let e3:Elements = try! element.getElementsByAttributeValue("data-test", "MARKET_CAP-value")
@@ -52,10 +52,6 @@ class YahooData {
                         }
                         let e7:Elements = try! element.getElementsByAttributeValue("data-test", "EX_DIVIDEND_DATE-value")
                         if e7.size() != 0 {
-//                            let e6:Elements = try! element.getElementsByClass("Trsdu(0.3s)")
-//                            if e6.size() != 0 {
-//                                per = Double(try! element.text()) ?? 0
-//                            }
                             exdividend = String(try! element.text())
                         }
                         break
@@ -67,7 +63,7 @@ class YahooData {
                 print("url contents fail")
             }
         }
-    //    print("ticker \(ticker) dividend : \(dividend)")
+
         return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number:num, volume:volume, per:per, exdividend: exdividend)
     }
 }

@@ -12,14 +12,14 @@ struct Stock: Identifiable, Hashable, Codable {
     var id: String = UUID().uuidString
     var ticker: String
     var price: Double
-    var dividend: String
+    var dividend: Double
     var period: String
     var number: Int
     var volume: String
     var per: Double
     var exdividend: String
     
-    init(ticker: String, price: Double, dividend: String, period: String, number:Int, volume:String, per:Double, exdividend:String) {
+    init(ticker: String, price: Double, dividend: Double, period: String, number:Int, volume:String, per:Double, exdividend:String) {
         self.ticker = ticker
         self.price = price
         self.dividend = dividend
@@ -46,7 +46,7 @@ struct StockView: View {
             Text(String(format: "%.2f", stock.price))
                 .frame(width: 80, alignment: .center)
                 .lineLimit(1)
-            Text("\(stock.dividend)")
+            Text(String(format: "%.2f", stock.dividend))
                 .frame(width: 80, alignment: .center)
                 .lineLimit(1)
             Text("\(stock.number)")

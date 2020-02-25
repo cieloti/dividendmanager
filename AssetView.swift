@@ -17,9 +17,8 @@ struct AssetView: View {
     
     @State private var newItem = ""
     @State private var number = ""
-    @ObservedObject var stocks = Stocks()
-//    @EnvironmentObject var stocks: Stocks
-//    @State private var stocks: [Stock] = []
+//    @ObservedObject var stocks = Stocks()
+    @EnvironmentObject var stocks: Stocks
 
     let yahooData = YahooData()
     let defaults = UserDefaults.standard

@@ -29,7 +29,7 @@ struct AssetDetailView: View {
             HStack {
                 Text("배당금")
                 Spacer()
-                Text(stock.dividend)
+                Text(String(format: "%.2f", stock.dividend))
             }
             .padding(.all, 5)
             HStack {

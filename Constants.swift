@@ -19,7 +19,12 @@ struct Constants {
         static let tabBar0 = "홈"
         static let tabBar1 = "자산"
     }
-    
+
+    struct HomeText {
+        static let asset = "자산현황"
+        static let money = "원"
+    }
+
     struct AssetText {
         static let assetTicker = "종목의 Ticker를 입력하세요"
         static let assetList = "종목 리스트"

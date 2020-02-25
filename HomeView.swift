@@ -9,14 +9,23 @@
 import SwiftUI
 
 struct HomeView: View {
-    var asset = "자산현황"
-    var money = "원"
+    @EnvironmentObject var stocks: Stocks
     
+    var count:Double {
+        get {
+            var ret = 0.0
+            for stock in stocks.items {
+                ret += stock.price * Double(stock.number)
+            }
+            return ret
+        }
+    }
+
     var body: some View {
         VStack() {
-            Text(asset)
+            Text(Constants.HomeText.asset)
                 .font(.largeTitle)
-            Text(money)
+            Text("\(count) " + Constants.HomeText.money)
         }
     }
 }
