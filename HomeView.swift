@@ -25,7 +25,8 @@ struct HomeView: View {
         VStack() {
             Text(Constants.HomeText.asset)
                 .font(.largeTitle)
-            Text("\(count) " + Constants.HomeText.money)
+            Text(String(format: "%.2f", count) + Constants.HomeText.money)
+                .font(.title)
         }
     }
 }

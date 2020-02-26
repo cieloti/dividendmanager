@@ -13,11 +13,13 @@ struct Constants {
     struct TabBarImageName {
         static let tabBar0 = "home"
         static let tabBar1 = "money"
+        static let tabBar2 = "calculator"
     }
     
     struct TabBarText {
         static let tabBar0 = "홈"
         static let tabBar1 = "자산"
+        static let tabBar2 = "배당금"
     }
 
     struct HomeText {
@@ -36,5 +38,9 @@ struct Constants {
         static let assetListPrice = "가격"
         static let assetListDividend = "주당배당금"
         static let assetListNumber = "주식수"
+    }
+    
+    struct CalculateText {
+        static let assetTotal = "총 배당금 : "
     }
 }
