@@ -67,17 +67,16 @@ class YahooData {
         return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number:num, volume:volume, per:per, exdividend: exdividend)
     }
     
-    var start = Date().addingTimeInterval(-31536000)
-    var end = Date()
+    var start = Int(Date().addingTimeInterval(-31536000).timeIntervalSince1970)
+    var end = Int(Date().timeIntervalSince1970)
     
-    func getDividendData(ticker:String) -> [Double] {
-        var dividend = [Double]()
+    func getDividendData(ticker:String) -> [DividendData] {
+        var data = [DividendData]()
+        let month  = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        var index = -1
         var temp = 0.0
         
-        print(start)
-        print(end)
-        
-        if let url = URL(string:"https://finance.yahoo.com/quote/\(ticker)/history?period1=1551180701&period2=1582716701&interval=div%7Csplit&filter=div&frequency=1mo") {
+        if let url = URL(string:"https://finance.yahoo.com/quote/\(ticker)/history?period1=\(start)&period2=\(end)&interval=div%7Csplit&filter=div&frequency=1mo") {
             do {
                 let contents = try String(contentsOf: url)
                 let doc: Document = try SwiftSoup.parse(contents)
@@ -87,12 +86,19 @@ class YahooData {
                     case "td":
                         let e1:Elements = try! element.getElementsByClass("Py(10px) Ta(start) Pend(10px)")
                         if e1.size() != 0 {
-                            print(String((try! e1.text()).split(separator: " ")[0]))
+                            let str = String((try! e1.text()).split(separator: " ")[0])
+                            if let i:Int = month.firstIndex(of: str) {
+                                index = i
+                            } else {
+                                index = -1
+                            }
                         }
                         let e2:Elements = try! element.getElementsByClass("Ta(c) Py(10px) Pstart(10px)")
                         if e2.size() != 0 {
                             temp = Double(String((try! e2.text()).split(separator: " ")[0]).replacingOccurrences(of: ",", with: "")) ?? 0
-                            print("temp : \(temp)")
+                            if index != -1 {
+                                data.append(DividendData(month: index, dividend: temp))
+                            }
                         }
                         break
                     default:
@@ -104,6 +110,7 @@ class YahooData {
             }
         }
 
-        return dividend
+        return data
     }
 }
+
