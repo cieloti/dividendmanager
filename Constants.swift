@@ -42,5 +42,10 @@ struct Constants {
     
     struct CalculateText {
         static let assetTotal = "총 배당금 : "
+        static let estimate = "배당금 예상"
+        static let perMonth = "월별"
+        static let perQuater = "분기별"
+        static let empty = ""
+        static let currency = "환율"
     }
 }
