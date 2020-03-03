@@ -65,8 +65,7 @@ struct CalculateView: View {
                     Text(Constants.CalculateText.empty)
                     Estimate(calculate: calculate)
                     Text(Constants.CalculateText.empty)
-//                    Text("원 달러 환율 : " + String(format: "%g", currency))
-//                    Text"원 달러 환율 : ").onAppear() {
+                    Text("원 달러 환율 : " + String(format: "%g", currency))
                 }
             }
             .navigationBarTitle(Text(Constants.CalculateText.assetTotal + String(format: "%.2f", divTotal)), displayMode: .inline)
@@ -80,7 +79,9 @@ struct BarChart: View {
 
     var max: Double {
         get {
-            return calculate.max {$0.dividend < $1.dividend}?.dividend ?? 0.0
+            let ret = calculate.max {$0.dividend < $1.dividend}?.dividend ?? 0.0
+            return ret != 0.0 ? ret : 1.0
+
         }
     }
     

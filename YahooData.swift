@@ -64,7 +64,7 @@ class YahooData {
             }
         }
 
-        return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number:num, volume:volume, per:per, exdividend: exdividend)
+        return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number:num, volume:volume, per:per, exdividend: exdividend, currency: "KRW")
     }
     
     var start = Int(Date().addingTimeInterval(-31536000).timeIntervalSince1970)

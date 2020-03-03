@@ -12,22 +12,41 @@ class WebService {
     func getCurrency(from: String, to: String) -> Double {
         var ret = 0.0
 
-        if let url = URL(string:"https://api.exchangeratesapi.io/latest") {
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        if let url = URL(string:"https://api.exchangeratesapi.io/latest?base=\(from)") {
             URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
                 if let data = data {
                     let jsonDecoder = JSONDecoder()
                     do {
                         let parsedJSON = try jsonDecoder.decode(Currency.self, from: data)
-                        ret = parsedJSON.rates.KRW / parsedJSON.rates.USD
-                        print("\(ret)")
+                        ret = self.getLocaleCurrency(locale: to, parsedJSON: parsedJSON)
+                        semaphore.signal()
                     } catch {
                         print(error)
+                        semaphore.signal()
                     }
                 }
                 }).resume()
         }
-        print("\(ret)")
+        semaphore.wait()
+        
         return ret
+    }
+    
+    func getLocaleCurrency(locale: String, parsedJSON: Currency) -> Double {
+        switch(locale) {
+        case "KRW":
+            return parsedJSON.rates.KRW
+        case "USD":
+            return parsedJSON.rates.USD
+        case "HKD":
+            return parsedJSON.rates.HKD
+        case "CNY":
+            return parsedJSON.rates.CNY
+        default:
+            return 0.0
+        }
     }
 }
 

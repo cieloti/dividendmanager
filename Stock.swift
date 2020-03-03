@@ -18,8 +18,9 @@ struct Stock: Identifiable, Hashable, Codable {
     var volume: String
     var per: Double
     var exdividend: String
+    var currency: String
     
-    init(ticker: String, price: Double, dividend: Double, period: String, number:Int, volume:String, per:Double, exdividend:String) {
+    init(ticker: String, price: Double, dividend: Double, period: String, number:Int, volume:String, per:Double, exdividend:String, currency: String) {
         self.ticker = ticker
         self.price = price
         self.dividend = dividend
@@ -32,6 +33,7 @@ struct Stock: Identifiable, Hashable, Codable {
         self.volume = volume
         self.per = per
         self.exdividend = exdividend
+        self.currency = currency
     }
 }
 

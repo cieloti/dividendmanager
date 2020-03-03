@@ -13,6 +13,7 @@ import SwiftSoup
 struct AssetView: View {
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Georgia-Bold", size: 20)!]
+        yahooApi.getData(ticker: "AAPL", number: "10")
     }
     
     @State private var newItem = ""
@@ -20,6 +21,7 @@ struct AssetView: View {
     @EnvironmentObject var stocks: Stocks
 
     let yahooData = YahooData()
+    let yahooApi = YahooAPI()
     let defaults = UserDefaults.standard
     
     var body: some View {
