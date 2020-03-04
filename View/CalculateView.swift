@@ -14,8 +14,8 @@ struct CalculateView: View {
     }
 
     @EnvironmentObject var stocks: Stocks
-    let yahooData = YahooData()
     let webService = WebService()
+    let yahooApi = YahooAPI()
     
     @State var pickerSelected = 0
     var currency: Double
@@ -35,7 +35,7 @@ struct CalculateView: View {
             var ret = [DividendData]()
             var sum = Array(repeating: 0.0, count: 12)
             for stock in stocks.items {
-                for d in yahooData.getDividendData(ticker: stock.ticker) {
+                for d in yahooApi.getDividendData(ticker: stock.ticker) {
                     if d.month != -1 {
                         sum[d.month] += d.dividend * Double(stock.number)
                     }

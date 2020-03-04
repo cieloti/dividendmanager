@@ -14,6 +14,7 @@ struct AssetView: View {
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Georgia-Bold", size: 20)!]
         yahooApi.getData(ticker: "AAPL", number: "10")
+        yahooApi.getDividendData(ticker: "AAPL")
     }
     
     @State private var newItem = ""
