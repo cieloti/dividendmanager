@@ -11,6 +11,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var stocks: Stocks
     let webService = WebService()
+    let commonApi = CommonApi()
     var currencyDic: [String : Double] = [:]
     
     init() {
@@ -26,20 +27,12 @@ struct HomeView: View {
             return ret
         }
     }
-    
-    func getFormatString(c: Double) -> String{
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.maximumFractionDigits = 0;
-        formatter.locale = Locale(identifier: "ko_KR")
-        return formatter.string(from: NSNumber(value: c))!
-    }
 
     var body: some View {
         VStack() {
             Text(Constants.HomeText.asset)
                 .font(.largeTitle)
-            Text(getFormatString(c:count))
+            Text(commonApi.getFormatString(c:count))
                 .font(.title)
         }
     }

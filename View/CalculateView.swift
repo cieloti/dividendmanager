@@ -17,6 +17,7 @@ struct CalculateView: View {
     @EnvironmentObject var stocks: Stocks
     let webService = WebService()
     let yahooApi = YahooAPI()
+    let commonApi = CommonApi()
     
     @State var pickerSelected = 0
     var currencyUSD: Double
@@ -44,7 +45,7 @@ struct CalculateView: View {
                 if stock.ticker.suffix(2) == "KS" {
                     if let i = month.firstIndex(of: String(stock.exdividend.prefix(3))) {
                         if i != -1 {
-                            sum[i] += stock.dividend
+                            sum[i] += stock.dividend * Double(stock.number)
                         }
                     }
                     continue
@@ -94,7 +95,7 @@ struct CalculateView: View {
                     Text("원 달러 환율 : " + String(format: "%g", currencyUSD))
                 }
             }
-            .navigationBarTitle(Text(Constants.CalculateText.assetTotal + String(format: "%.2f", divTotal) + "원"), displayMode: .inline)
+            .navigationBarTitle(Text(Constants.CalculateText.assetTotal + commonApi.getFormatString(c:divTotal)), displayMode: .inline)
         }
     }
 }

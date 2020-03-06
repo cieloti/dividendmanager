@@ -47,20 +47,3 @@ struct KNFQuoteDetail: Codable {
     var symbol: String
     var longName: String
 }
-
-struct KNFQuoteResponse2: Codable {
-    var quoteResponse: KNFResult2
-}
-
-struct KNFResult2: Codable {
-    var result: [KNFQuoteDetail2]
-}
-
-struct KNFQuoteDetail2: Codable {
-    var currency: String
-    var regularMarketPrice: Double
-    var marketCap: Double
-    var symbol: String
-    var longName: String
-}
-

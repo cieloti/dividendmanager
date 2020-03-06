@@ -38,16 +38,18 @@ class YahooAPI {
                     let jsonDecoder = JSONDecoder()
                     do {
                         let parsedJSON = try jsonDecoder.decode(QuoteResponse.self, from: data)
-                        presentValue = parsedJSON.quoteResponse.result[0].regularMarketPrice
-                        let unformattedValue = parsedJSON.quoteResponse.result[0].marketCap
-                        per = parsedJSON.quoteResponse.result[0].trailingPE
-                        currency = parsedJSON.quoteResponse.result[0].currency
-                        longName = parsedJSON.quoteResponse.result[0].longName
-//                        dividendRatio = String(parsedJSON.quoteResponse.result[0].trailingAnnualDividendRate)
-                        formatter.locale = Locale(identifier: self.getIdentifier(currency: currency))
-                        volume = formatter.string(from: NSNumber(value: unformattedValue))!
-                        let date = Date(timeIntervalSince1970: Double(parsedJSON.quoteResponse.result[0].dividendDate))
-                        exdividend = dateFormatter.string(from: date)
+                        if parsedJSON.quoteResponse.result.count != 0  {
+                            presentValue = parsedJSON.quoteResponse.result[0].regularMarketPrice
+                            let unformattedValue = parsedJSON.quoteResponse.result[0].marketCap
+                            per = parsedJSON.quoteResponse.result[0].trailingPE
+                            currency = parsedJSON.quoteResponse.result[0].currency
+                            longName = parsedJSON.quoteResponse.result[0].longName
+                            // dividendRatio = String(parsedJSON.quoteResponse.result[0].trailingAnnualDividendRate)
+                            formatter.locale = Locale(identifier: self.getIdentifier(currency: currency))
+                            volume = formatter.string(from: NSNumber(value: unformattedValue))!
+                            let date = Date(timeIntervalSince1970: Double(parsedJSON.quoteResponse.result[0].dividendDate))
+                            exdividend = dateFormatter.string(from: date)
+                        }
                         semaphore.signal()
                     } catch {
                         do {
@@ -60,18 +62,7 @@ class YahooAPI {
                             formatter.locale = Locale(identifier: self.getIdentifier(currency: currency))
                             volume = formatter.string(from: NSNumber(value: unformattedValue))!
                         } catch {
-                            /*
-                            do {
-                                let parsedJSON = try jsonDecoder.decode(KNFQuoteResponse2.self, from: data)
-                                presentValue = parsedJSON.quoteResponse.result[0].regularMarketPrice
-                                let unformattedValue = parsedJSON.quoteResponse.result[0].marketCap
-                                currency = parsedJSON.quoteResponse.result[0].currency
-                                longName = parsedJSON.quoteResponse.result[0].longName
-                                formatter.locale = Locale(identifier: self.getIdentifier(currency: currency))
-                                volume = formatter.string(from: NSNumber(value: unformattedValue))!
-                            } catch {
-                                print(error)
-                            }*/
+                            print(error)
                             fail = true
                         }
                         semaphore.signal()
