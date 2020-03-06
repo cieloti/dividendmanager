@@ -13,15 +13,13 @@ import SwiftSoup
 struct AssetView: View {
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Georgia-Bold", size: 20)!]
-        yahooApi.getData(ticker: "AAPL", number: "10")
-        yahooApi.getDividendData(ticker: "AAPL")
     }
     
     @State private var newItem = ""
     @State private var number = ""
     @EnvironmentObject var stocks: Stocks
 
-    let yahooData = YahooData()
+//    let yahooData = YahooData()
     let yahooApi = YahooAPI()
     let defaults = UserDefaults.standard
     
@@ -36,7 +34,8 @@ struct AssetView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Button(Constants.AssetText.assetAdd) {
                             if !self.newItem.isEmpty {
-                                self.stocks.items.append(self.yahooData.getData(ticker:self.newItem.uppercased(), number:self.number))
+//                                self.stocks.items.append(self.yahooData.getData(ticker:self.newItem.uppercased(), number:self.number))
+                                self.stocks.items.append(self.yahooApi.getData(ticker:self.newItem.uppercased(), number:self.number))
                                 self.newItem = ""
                                 self.number = ""
                             }
@@ -47,7 +46,7 @@ struct AssetView: View {
                 Section(header: Text(Constants.AssetText.assetList)) {
                     HStack {
                         Text(Constants.AssetText.assetListTicker)
-                            .frame(width: 80, alignment: .leading)
+                            .frame(width: 100, alignment: .leading)
                             .lineLimit(1)
                         Text(Constants.AssetText.assetListPrice)
                             .frame(width: 80, alignment: .center)

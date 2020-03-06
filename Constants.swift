@@ -24,7 +24,7 @@ struct Constants {
 
     struct HomeText {
         static let asset = "자산현황"
-        static let money = "원"
+        static let money = " 원"
     }
 
     struct AssetText {
@@ -40,6 +40,18 @@ struct Constants {
         static let assetListNumber = "주식수"
     }
     
+    struct AssetDetailText {
+        static let ticker = "종목명"
+        static let price = "현재가"
+        static let dividend = "배당금"
+        static let dividendRatio = "배당률"
+        static let marketCap = "시가총액"
+        static let per = "PER"
+        static let date = "배당일"
+        static let number = "주식수"
+        static let currency = "통화"
+    }
+    
     struct CalculateText {
         static let assetTotal = "총 배당금 : "
         static let estimate = "배당금 예상"
@@ -47,5 +59,9 @@ struct Constants {
         static let perQuater = "분기별"
         static let empty = ""
         static let currency = "환율"
+    }
+    
+    struct YahooApiText {
+        static let url = "https://query1.finance.yahoo.com/v8/finance/chart"
     }
 }

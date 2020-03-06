@@ -19,8 +19,9 @@ struct Stock: Identifiable, Hashable, Codable {
     var per: Double
     var exdividend: String
     var currency: String
+    var longName: String
     
-    init(ticker: String, price: Double, dividend: Double, period: String, number:Int, volume:String, per:Double, exdividend:String, currency: String) {
+    init(ticker: String, price: Double, dividend: Double, period: String, number:Int, volume:String, per:Double, exdividend:String, currency: String, longName: String) {
         self.ticker = ticker
         self.price = price
         self.dividend = dividend
@@ -34,6 +35,7 @@ struct Stock: Identifiable, Hashable, Codable {
         self.per = per
         self.exdividend = exdividend
         self.currency = currency
+        self.longName = longName
     }
 }
 
@@ -43,7 +45,7 @@ struct StockView: View {
     var body: some View {
         HStack {
             Text(stock.ticker)
-                .frame(width: 80, alignment: .leading)
+                .frame(width: 100, alignment: .leading)
                 .lineLimit(1)
             Text(String(format: "%.2f", stock.price))
                 .frame(width: 80, alignment: .center)

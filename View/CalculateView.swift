@@ -10,7 +10,8 @@ import SwiftUI
 
 struct CalculateView: View {
     init() {
-        currency = webService.getCurrency(from:"USD", to:"KRW")
+        currencyUSD = webService.getCurrency(from:"USD", to:"KRW")
+        currencyCNY = webService.getCurrency(from:"CNY", to:"KRW")
     }
 
     @EnvironmentObject var stocks: Stocks
@@ -18,13 +19,17 @@ struct CalculateView: View {
     let yahooApi = YahooAPI()
     
     @State var pickerSelected = 0
-    var currency: Double
+    var currencyUSD: Double
+    var currencyKRW = 1.0
+    var currencyCNY: Double
+    let month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
+    // 총 배당금
     var divTotal:Double {
         get {
             var ret = 0.0
             for stock in stocks.items {
-                ret += stock.dividend * Double(stock.number)
+                ret += stock.dividend * Double(stock.number) * getCurrency(currency: stock.currency)
             }
             return ret
         }
@@ -35,16 +40,37 @@ struct CalculateView: View {
             var ret = [DividendData]()
             var sum = Array(repeating: 0.0, count: 12)
             for stock in stocks.items {
+                // 한국주식은 야후에서 배당금 히스토리가 안나와서 한번에 나오게함
+                if stock.ticker.suffix(2) == "KS" {
+                    if let i = month.firstIndex(of: String(stock.exdividend.prefix(3))) {
+                        if i != -1 {
+                            sum[i] += stock.dividend
+                        }
+                    }
+                    continue
+                }
+                // 야후 rest api를 사용하여 배당내역 받아옴
                 for d in yahooApi.getDividendData(ticker: stock.ticker) {
                     if d.month != -1 {
-                        sum[d.month] += d.dividend * Double(stock.number)
+                        sum[d.month] += d.dividend * Double(stock.number) * getCurrency(currency: stock.currency)
                     }
                 }
             }
             for i in 0...11 {
-                ret.append(DividendData(month: i, dividend: sum[i]))
+                ret.append(DividendData(month: i, dividend: sum[i], currency:"USD"))
             }
             return ret
+        }
+    }
+    
+    func getCurrency(currency: String) -> Double {
+        switch(currency) {
+        case "USD":
+            return currencyUSD
+        case "CNY":
+            return currencyCNY
+        default:
+            return currencyKRW
         }
     }
 
@@ -65,15 +91,15 @@ struct CalculateView: View {
                     Text(Constants.CalculateText.empty)
                     Estimate(calculate: calculate)
                     Text(Constants.CalculateText.empty)
-                    Text("원 달러 환율 : " + String(format: "%g", currency))
+                    Text("원 달러 환율 : " + String(format: "%g", currencyUSD))
                 }
             }
-            .navigationBarTitle(Text(Constants.CalculateText.assetTotal + String(format: "%.2f", divTotal)), displayMode: .inline)
+            .navigationBarTitle(Text(Constants.CalculateText.assetTotal + String(format: "%.2f", divTotal) + "원"), displayMode: .inline)
         }
     }
 }
 
-
+// 월별 배당금 차트
 struct BarChart: View {
     var calculate:[DividendData]
 
@@ -106,6 +132,7 @@ struct BarChart: View {
     }
 }
 
+// 월별 배당금 예상금액
 struct Estimate: View {
     var calculate:[DividendData]
 

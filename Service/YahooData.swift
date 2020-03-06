@@ -64,7 +64,7 @@ class YahooData {
             }
         }
 
-        return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number:num, volume:volume, per:per, exdividend: exdividend, currency: "KRW")
+        return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number:num, volume:volume, per:per, exdividend: exdividend, currency: "KRW", longName: ticker)
     }
     
     var start = Int(Date().addingTimeInterval(-31536000).timeIntervalSince1970)
@@ -97,7 +97,7 @@ class YahooData {
                         if e2.size() != 0 {
                             temp = Double(String((try! e2.text()).split(separator: " ")[0]).replacingOccurrences(of: ",", with: "")) ?? 0
                             if index != -1 {
-                                data.append(DividendData(month: index, dividend: temp))
+                                data.append(DividendData(month: index, dividend: temp, currency:"USD"))
                             }
                         }
                         break

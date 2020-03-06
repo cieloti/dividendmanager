@@ -15,49 +15,55 @@ struct AssetDetailView: View {
         VStack(alignment: .leading) {
             Spacer()
             HStack {
-                Text("종목명")
+                Text(Constants.AssetDetailText.ticker)
                 Spacer()
-                Text(stock.ticker)
+                Text(stock.longName)
             }
             .padding(.all, 5)
             HStack {
-                Text("현재가")
+                Text(Constants.AssetDetailText.price)
                 Spacer()
                 Text(String(format: "%.2f", stock.price))
             }
             .padding(.all, 5)
             HStack {
-                Text("배당금")
+                Text(Constants.AssetDetailText.dividend)
                 Spacer()
                 Text(String(format: "%.2f", stock.dividend))
             }
             .padding(.all, 5)
             HStack {
-                Text("배당률")
+                Text(Constants.AssetDetailText.dividendRatio)
                 Spacer()
                 Text(stock.period)
             }
             .padding(.all, 5)
             HStack {
-                Text("시가총액")
+                Text(Constants.AssetDetailText.marketCap)
                 Spacer()
                 Text(stock.volume)
             }
             .padding(.all, 5)
             HStack {
-                Text("PER")
+                Text(Constants.AssetDetailText.per)
                 Spacer()
                 Text(String(format: "%.2f", stock.per))
             }
             .padding(.all, 5)
             HStack {
-                Text("배당락일")
+                Text(Constants.AssetDetailText.date)
                 Spacer()
                 Text(stock.exdividend)
             }
             .padding(.all, 5)
             HStack {
-                Text("주식수")
+                Text(Constants.AssetDetailText.currency)
+                Spacer()
+                Text("\(stock.currency)")
+            }
+            .padding(.all, 5)
+            HStack {
+                Text(Constants.AssetDetailText.number)
                 Spacer()
                 Text("\(stock.number)")
             }
