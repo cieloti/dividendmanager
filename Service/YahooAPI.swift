@@ -82,7 +82,6 @@ class YahooAPI {
         semaphore.wait(timeout: .now() + 3)
         
         if fail {
-            print("krw gogo")
             return yahooData.getData(ticker: ticker, number: number)
         }
         
