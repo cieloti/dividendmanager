@@ -10,8 +10,7 @@ import SwiftUI
 
 struct CalculateView: View {
     init() {
-        currencyUSD = webService.getCurrency(from:"USD", to:"KRW")
-        currencyCNY = webService.getCurrency(from:"CNY", to:"KRW")
+        currencyDic = webService.getCurrencyLocale()
     }
 
     @EnvironmentObject var stocks: Stocks
@@ -20,9 +19,7 @@ struct CalculateView: View {
     let commonApi = CommonApi()
     
     @State var pickerSelected = 0
-    var currencyUSD: Double
-    var currencyKRW = 1.0
-    var currencyCNY: Double
+    var currencyDic: [String : Double] = [:]
     let month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
     // 총 배당금
@@ -30,7 +27,7 @@ struct CalculateView: View {
         get {
             var ret = 0.0
             for stock in stocks.items {
-                ret += stock.dividend * Double(stock.number) * getCurrency(currency: stock.currency)
+                ret += stock.dividend * Double(stock.number) * (currencyDic[stock.currency] ?? 1.0)
             }
             return ret
         }
@@ -53,7 +50,7 @@ struct CalculateView: View {
                 // 야후 rest api를 사용하여 배당내역 받아옴
                 for d in yahooApi.getDividendData(ticker: stock.ticker) {
                     if d.month != -1 {
-                        sum[d.month] += d.dividend * Double(stock.number) * getCurrency(currency: stock.currency)
+                        sum[d.month] += d.dividend * Double(stock.number) * (currencyDic[stock.currency] ?? 1.0)
                     }
                 }
             }
@@ -61,17 +58,6 @@ struct CalculateView: View {
                 ret.append(DividendData(month: i, dividend: sum[i], currency:"USD"))
             }
             return ret
-        }
-    }
-    
-    func getCurrency(currency: String) -> Double {
-        switch(currency) {
-        case "USD":
-            return currencyUSD
-        case "CNY":
-            return currencyCNY
-        default:
-            return currencyKRW
         }
     }
 
@@ -92,7 +78,7 @@ struct CalculateView: View {
                     Text(Constants.CalculateText.empty)
                     Estimate(calculate: calculate)
                     Text(Constants.CalculateText.empty)
-                    Text("원 달러 환율 : " + String(format: "%g", currencyUSD))
+                    Text("원 달러 환율 : " + String(format: "%g", (currencyDic["USD"] ?? 1.0)))
                 }
             }
             .navigationBarTitle(Text(Constants.CalculateText.assetTotal + commonApi.getFormatString(c:divTotal)), displayMode: .inline)

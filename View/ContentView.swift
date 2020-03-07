@@ -11,11 +11,9 @@ import SwiftUI
 struct ContentView: View {
     init() {
         UITabBar.appearance().backgroundColor = UIColor.white
-//        currencyLocale = webService.getCurrencyLocale()
     }
     
     @EnvironmentObject var stocks: Stocks
-//    var currencyLocale: CurrencyLocale
     @State private var selection = 0
     
     var body: some View {

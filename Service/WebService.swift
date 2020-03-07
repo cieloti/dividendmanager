@@ -43,6 +43,8 @@ class WebService {
             return parsedJSON.rates.HKD
         case "CNY":
             return parsedJSON.rates.CNY
+        case "JPY":
+            return parsedJSON.rates.JPY
         default:
             return 0.0
         }
@@ -62,6 +64,7 @@ class WebService {
                         ret["KRW"] = parsedJSON.rates.KRW
                         ret["HKD"] = 1.0 / parsedJSON.rates.HKD
                         ret["CNY"]  = 1.0 / parsedJSON.rates.CNY
+                        ret["JPY"]  = 1.0 / parsedJSON.rates.JPY
                         semaphore.signal()
                     } catch {
                         print(error)

@@ -19,7 +19,6 @@ struct AssetView: View {
     @State private var number = ""
     @EnvironmentObject var stocks: Stocks
 
-//    let yahooData = YahooData()
     let yahooApi = YahooAPI()
     let defaults = UserDefaults.standard
     
@@ -34,7 +33,6 @@ struct AssetView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Button(Constants.AssetText.assetAdd) {
                             if !self.newItem.isEmpty {
-//                                self.stocks.items.append(self.yahooData.getData(ticker:self.newItem.uppercased(), number:self.number))
                                 self.stocks.items.append(self.yahooApi.getData(ticker:self.newItem.uppercased(), number:self.number))
                                 self.newItem = ""
                                 self.number = ""
@@ -69,17 +67,31 @@ struct AssetView: View {
                 }
             }
             .navigationBarTitle(Text(Constants.AssetText.assetNavigation), displayMode: .inline)
-//            .navigationBarItems(trailing: Button(action: {
-//                let s = Stock(ticker: "1", price: 0.0, dividend: "", period: "")
-//                self.stocks.items.append(s)
-//            }){
-//                Image(systemName: "plus")
-//            })
+            .navigationBarItems(trailing: Button(action: {
+//                Timer.scheduledTimer(withTimeInterval: 1000.0, repeats: true) { timer in
+                    self.updateItems(stocks: self.stocks)
+//                }
+            }){
+                Text("Refresh")
+            })
         }
     }
 
     func removeItems(at offsets: IndexSet) {
         stocks.items.remove(atOffsets:offsets)
+    }
+
+    func updateItems(stocks: Stocks) {
+        var temp: Stock
+        for i in stocks.items {
+            temp = self.yahooApi.getData(ticker: i.ticker, number: String(i.number))
+            i.price = temp.price
+            i.dividend = temp.dividend
+            i.period = temp.period
+            i.volume = temp.volume
+            i.per = temp.per
+            i.exdividend = temp.exdividend
+        }
     }
 }
 

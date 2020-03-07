@@ -11,65 +11,42 @@ import SwiftUI
 struct AssetDetailView: View {
     var stock: Stock
 
-    var body: some View {
-        VStack(alignment: .leading) {
-            Spacer()
-            HStack {
-                Text(Constants.AssetDetailText.ticker)
-                Spacer()
-                Text(stock.longName)
-            }
-            .padding(.all, 5)
-            HStack {
-                Text(Constants.AssetDetailText.price)
-                Spacer()
-                Text(String(format: "%.2f", stock.price))
-            }
-            .padding(.all, 5)
-            HStack {
-                Text(Constants.AssetDetailText.dividend)
-                Spacer()
-                Text(String(format: "%.2f", stock.dividend))
-            }
-            .padding(.all, 5)
-            HStack {
-                Text(Constants.AssetDetailText.dividendRatio)
-                Spacer()
-                Text(stock.period)
-            }
-            .padding(.all, 5)
-            HStack {
-                Text(Constants.AssetDetailText.marketCap)
-                Spacer()
-                Text(stock.volume)
-            }
-            .padding(.all, 5)
-            HStack {
-                Text(Constants.AssetDetailText.per)
-                Spacer()
-                Text(String(format: "%.2f", stock.per))
-            }
-            .padding(.all, 5)
-            HStack {
-                Text(Constants.AssetDetailText.date)
-                Spacer()
-                Text(stock.exdividend)
-            }
-            .padding(.all, 5)
-            HStack {
-                Text(Constants.AssetDetailText.currency)
-                Spacer()
-                Text("\(stock.currency)")
-            }
-            .padding(.all, 5)
-            HStack {
-                Text(Constants.AssetDetailText.number)
-                Spacer()
-                Text("\(stock.number)")
-            }
-            .padding(.all, 5)
+    var details: [AssetDetailItem] {
+        get {
+            var ret = [AssetDetailItem]()
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.ticker, second: stock.longName))
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.price, second: String(format: "%.2f", stock.price)))
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.dividend, second: String(format: "%.2f", stock.dividend)))
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.dividendRatio, second: stock.period))
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.marketCap, second: stock.volume))
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.per, second:String(format: "%.2f", stock.per)))
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.date, second: stock.exdividend))
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.currency, second: stock.currency))
+            ret.append(AssetDetailItem(first: Constants.AssetDetailText.number, second: "\(stock.number)"))
+            ret.append(AssetDetailItem(first: "", second: ""))
+            return ret
         }
-        .padding(.all)
+    }
+
+    var body: some View {
+        VStack {
+            Group {
+                Spacer()
+            }
+            Group {
+                ForEach(details, id: \.self) { detail in
+                    VStack {
+                        HStack {
+                            Text(detail.first)
+                            Spacer()
+                            Text(detail.second)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 5)
+            }
+        }
     }
 }
 

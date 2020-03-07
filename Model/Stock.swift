@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct Stock: Identifiable, Hashable, Codable {
+class Stock: Identifiable, Hashable, Codable {
     var id: String = UUID().uuidString
     var ticker: String
     var price: Double
@@ -20,7 +20,7 @@ struct Stock: Identifiable, Hashable, Codable {
     var exdividend: String
     var currency: String
     var longName: String
-    
+
     init(ticker: String, price: Double, dividend: Double, period: String, number:Int, volume:String, per:Double, exdividend:String, currency: String, longName: String) {
         self.ticker = ticker
         self.price = price
@@ -37,11 +37,19 @@ struct Stock: Identifiable, Hashable, Codable {
         self.currency = currency
         self.longName = longName
     }
+
+    static func == (lhs: Stock, rhs: Stock) -> Bool {
+        return lhs.ticker == rhs.ticker
+    }
+
+    public func hash(into hasher: inout Hasher) {
+         hasher.combine(ObjectIdentifier(self).hashValue)
+    }
 }
 
 struct StockView: View {
     let stock: Stock
-    
+
     var body: some View {
         HStack {
             Text(stock.ticker)

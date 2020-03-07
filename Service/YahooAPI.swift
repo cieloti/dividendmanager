@@ -70,7 +70,7 @@ class YahooAPI {
                 }
             }).resume()
         }
-        semaphore.wait(timeout: .now() + 3)
+        semaphore.wait(timeout: .now() + 5)
         
         if fail {
             return yahooData.getData(ticker: ticker, number: number)
@@ -103,7 +103,7 @@ class YahooAPI {
     
     func getDividendData(ticker:String) -> [DividendData] {
         var dividendData = [DividendData]()
-        let month  = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Octorber", "November", "Deccember"]
+        let month  = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         var index = -1
         var currency = "KRW"
         var krw = 0.0
@@ -156,13 +156,6 @@ class YahooAPI {
             }).resume()
         }
         semaphore.wait(timeout: .now() + 3)
-        
-//        krw = webService.getCurrency(from:currency, to:"KRW")
-//        print(currency)
-//        print(krw)
-//        for d in dividendData {
-//            d.dividend = 333.0
-//        }
 
         return dividendData
     }
