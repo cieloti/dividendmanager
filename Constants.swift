@@ -28,16 +28,17 @@ struct Constants {
     }
 
     struct AssetText {
-        static let assetTicker = "종목의 Ticker를 입력하세요"
-        static let assetList = "종목 리스트"
-        static let assetNavigation = "자산 현황"
-        static let assetAddNewItem = "종목 입력"
-        static let assetNumber = "주식 수량"
-        static let assetAdd = "추가"
-        static let assetListTicker = "종목명"
-        static let assetListPrice = "가격"
-        static let assetListDividend = "주당배당금"
-        static let assetListNumber = "주식수"
+        static let ticker = "종목의 Ticker를 입력하세요"
+        static let list = "종목 리스트"
+        static let navigation = "자산 현황"
+        static let addNewItem = "종목 입력"
+        static let number = "주식 수량"
+        static let add = "추가"
+        static let listTicker = "종목명"
+        static let listPrice = "가격"
+        static let listDividend = "주당배당금"
+        static let listNumber = "주식수"
+        static let refresh = "Refresh"
     }
     
     struct AssetDetailText {

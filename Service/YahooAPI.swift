@@ -70,7 +70,7 @@ class YahooAPI {
                 }
             }).resume()
         }
-        semaphore.wait(timeout: .now() + 5)
+        semaphore.wait(timeout: .now() + 3)
         
         if fail {
             return yahooData.getData(ticker: ticker, number: number)
@@ -158,5 +158,54 @@ class YahooAPI {
         semaphore.wait(timeout: .now() + 3)
 
         return dividendData
+    }
+    
+    func getChart(ticker:String) -> AssetDetailChartModel {
+        let start = Int(Date().addingTimeInterval(-31536000).timeIntervalSince1970)
+        let end = Int(Date().timeIntervalSince1970)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "LLLL"
+        
+        var ret = AssetDetailChartModel(date: [0], price: [0.0])
+
+        let semaphore = DispatchSemaphore(value: 0)
+        // "https://query1.finance.yahoo.com/v8/finance/chart/\(ticker)?symbol=\(ticker)&period1=\(start)&period2=\(end)&interval=1d&range=1mo
+        // "validRanges":[
+//        "1d",
+//        "5d",
+//        "1mo",
+//        "3mo",
+//        "6mo",
+//        "1y",
+//        "2y",
+//        "5y",
+//        "10y",
+//        "ytd",
+//        "max"
+//        ]
+        if let url = URL(string: "https://query1.finance.yahoo.com/v8/finance/chart/\(ticker)?symbol=\(ticker)&interval=1d&range=1mo") {
+            URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
+                if let data = data {
+                    let jsonDecoder = JSONDecoder()
+                    var formmatedTimestamp: [Int] = []
+                    do {
+                        let parsedJSON = try jsonDecoder.decode(ChartResponse.self, from: data)
+                        let format = DateFormatter()
+                        format.dateFormat = "MMdd"
+                        for i in parsedJSON.chart.result[0].timestamp {
+                            let formattedDate = format.string(from: Date(timeIntervalSince1970: Double(i)))
+                            formmatedTimestamp.append(Int(formattedDate) ?? 0)
+                        }
+                        ret = AssetDetailChartModel(date: formmatedTimestamp, price: parsedJSON.chart.result[0].indicators.adjclose[0].adjclose)
+                        semaphore.signal()
+                    } catch {
+                        print(error)
+                    }
+                }
+            }).resume()
+        }
+        semaphore.wait(timeout: .now() + 3)
+
+        return ret
     }
 }

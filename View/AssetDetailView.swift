@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct AssetDetailView: View {
     var stock: Stock
@@ -32,6 +33,12 @@ struct AssetDetailView: View {
         VStack {
             Group {
                 Spacer()
+                GeometryReader { p in
+                    VStack {
+                        LineChartSwiftUI(stock: self.stock)
+                            .frame(width: p.size.width, height: p.size.height, alignment: .center)
+                    }
+                }
             }
             Group {
                 ForEach(details, id: \.self) { detail in
@@ -58,3 +65,48 @@ struct AssetDetailView_Previews: PreviewProvider {
     }
 }
 #endif
+
+struct LineChartSwiftUI: UIViewRepresentable {
+    let lineChart = LineChartView()
+    let yahooApi = YahooAPI()
+    var stock: Stock
+
+    func makeUIView(context: UIViewRepresentableContext<LineChartSwiftUI>) -> LineChartView {
+        setUpChart()
+        return lineChart
+    }
+
+    func updateUIView(_ uiView: LineChartView, context: UIViewRepresentableContext<LineChartSwiftUI>) {
+
+    }
+
+    func setUpChart() {
+        lineChart.noDataText = "No Data Available"
+        let dataSets = [getLineChartDataSet()]
+        let data = LineChartData(dataSets: dataSets)
+        data.setValueFont(.systemFont(ofSize: 7, weight: .light))
+        lineChart.data = data
+    }
+
+    func getChartDataPoints(sessions: [Int], accuracy: [Double]) -> [ChartDataEntry] {
+        var dataPoints: [ChartDataEntry] = []
+        for count in (0..<sessions.count) {
+            dataPoints.append(ChartDataEntry.init(x: Double(sessions[count]), y: accuracy[count]))
+        }
+        return dataPoints
+    }
+
+    func getLineChartDataSet() -> LineChartDataSet {
+        let response = yahooApi.getChart(ticker: stock.ticker)
+        
+        let dataPoints = getChartDataPoints(sessions: response.date, accuracy: response.price)
+        let set = LineChartDataSet(entries: dataPoints, label: "1mo")
+        set.lineWidth = 2.5
+        set.circleRadius = 4
+        set.circleHoleRadius = 2
+        let color = ChartColorTemplates.vordiplom()[0]
+        set.setColor(color)
+        set.setCircleColor(color)
+        return set
+    }
+}

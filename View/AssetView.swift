@@ -14,24 +14,25 @@ struct AssetView: View {
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Georgia-Bold", size: 20)!]
     }
-    
+
+    @EnvironmentObject var stocks: Stocks
     @State private var newItem = ""
     @State private var number = ""
-    @EnvironmentObject var stocks: Stocks
+    @State private var buttonEnable = true
 
     let yahooApi = YahooAPI()
     let defaults = UserDefaults.standard
-    
+
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text(Constants.AssetText.assetTicker)) {
+                Section(header: Text(Constants.AssetText.ticker)) {
                     HStack() {
-                        TextField(Constants.AssetText.assetAddNewItem, text: $newItem)
+                        TextField(Constants.AssetText.addNewItem, text: $newItem)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
-                        TextField(Constants.AssetText.assetNumber, text: $number)
+                        TextField(Constants.AssetText.number, text: $number)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
-                        Button(Constants.AssetText.assetAdd) {
+                        Button(Constants.AssetText.add) {
                             if !self.newItem.isEmpty {
                                 self.stocks.items.append(self.yahooApi.getData(ticker:self.newItem.uppercased(), number:self.number))
                                 self.newItem = ""
@@ -41,18 +42,18 @@ struct AssetView: View {
                         .padding(.horizontal, 10.0)
                     }
                 }
-                Section(header: Text(Constants.AssetText.assetList)) {
+                Section(header: Text(Constants.AssetText.list)) {
                     HStack {
-                        Text(Constants.AssetText.assetListTicker)
+                        Text(Constants.AssetText.listTicker)
                             .frame(width: 100, alignment: .leading)
                             .lineLimit(1)
-                        Text(Constants.AssetText.assetListPrice)
+                        Text(Constants.AssetText.listPrice)
                             .frame(width: 80, alignment: .center)
                             .lineLimit(1)
-                        Text(Constants.AssetText.assetListDividend)
+                        Text(Constants.AssetText.listDividend)
                             .frame(width: 80, alignment: .center)
                             .lineLimit(1)
-                        Text(Constants.AssetText.assetListNumber)
+                        Text(Constants.AssetText.listNumber)
                             .frame(width: 80, alignment: .center)
                             .lineLimit(1)
                     }
@@ -66,14 +67,16 @@ struct AssetView: View {
                     }
                 }
             }
-            .navigationBarTitle(Text(Constants.AssetText.assetNavigation), displayMode: .inline)
+            .navigationBarTitle(Text(Constants.AssetText.navigation), displayMode: .inline)
             .navigationBarItems(trailing: Button(action: {
+                self.buttonEnable = false
 //                Timer.scheduledTimer(withTimeInterval: 1000.0, repeats: true) { timer in
                     self.updateItems(stocks: self.stocks)
 //                }
+                self.buttonEnable = true
             }){
-                Text("Refresh")
-            })
+                Text(Constants.AssetText.refresh)
+                }.disabled(!buttonEnable))
         }
     }
 

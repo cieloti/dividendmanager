@@ -47,3 +47,24 @@ struct KNFQuoteDetail: Codable {
     var symbol: String
     var longName: String
 }
+
+struct ChartResponse: Codable {
+    var chart: ChartResult
+}
+
+struct ChartResult: Codable {
+    var result: [ChartTimeStamp]
+}
+
+struct ChartTimeStamp: Codable {
+    var timestamp: [Int]
+    var indicators: ChartIndicators
+}
+
+struct ChartIndicators: Codable {
+    var adjclose: [ChartAdjClose]
+}
+
+struct ChartAdjClose: Codable {
+    var adjclose: [Double]
+}
