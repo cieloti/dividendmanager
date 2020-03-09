@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  DividendManager
 //
-//  Created by cieloti on 2020/02/01.
+//  Created by cieloti on 2020/03/09.
 //  Copyright © 2020 cieloti. All rights reserved.
 //
 
@@ -13,7 +13,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var stocks = Stocks()
-
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.

@@ -5,7 +5,6 @@
 //  Created by cieloti on 2020/03/05.
 //  Copyright © 2020 cieloti. All rights reserved.
 //
-
 import Foundation
 
 struct Currency: Codable {

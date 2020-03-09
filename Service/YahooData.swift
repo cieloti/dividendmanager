@@ -5,6 +5,7 @@
 //  Created by cieloti on 2020/02/22.
 //  Copyright © 2020 cieloti. All rights reserved.
 //
+import Foundation
 import SwiftSoup
 
 class YahooData {
@@ -113,4 +114,3 @@ class YahooData {
         return data
     }
 }
-

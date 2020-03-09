@@ -5,9 +5,8 @@
 //  Created by cieloti on 2020/02/22.
 //  Copyright © 2020 cieloti. All rights reserved.
 //
-
 import SwiftUI
-import Charts
+//import Charts
 
 struct AssetDetailView: View {
     var stock: Stock
@@ -33,12 +32,12 @@ struct AssetDetailView: View {
         VStack {
             Group {
                 Spacer()
-                GeometryReader { p in
-                    VStack {
-                        LineChartSwiftUI(stock: self.stock)
-                            .frame(width: p.size.width, height: p.size.height, alignment: .center)
-                    }
-                }
+//                GeometryReader { p in
+//                    VStack {
+//                        LineChartSwiftUI(stock: self.stock)
+//                            .frame(width: p.size.width, height: p.size.height, alignment: .center)
+//                    }
+//                }
             }
             Group {
                 ForEach(details, id: \.self) { detail in
@@ -65,7 +64,7 @@ struct AssetDetailView_Previews: PreviewProvider {
     }
 }
 #endif
-
+/*
 struct LineChartSwiftUI: UIViewRepresentable {
     let lineChart = LineChartView()
     let yahooApi = YahooAPI()
@@ -110,3 +109,4 @@ struct LineChartSwiftUI: UIViewRepresentable {
         return set
     }
 }
+*/

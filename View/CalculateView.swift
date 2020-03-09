@@ -5,7 +5,6 @@
 //  Created by cieloti on 2020/02/25.
 //  Copyright © 2020 cieloti. All rights reserved.
 //
-
 import SwiftUI
 
 struct CalculateView: View {
