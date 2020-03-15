@@ -14,7 +14,6 @@ struct CalculateView: View {
 
     @EnvironmentObject var stocks: Stocks
     let webService = WebService()
-    let yahooApi = YahooAPI()
     let commonApi = CommonApi()
     
     @State var pickerSelected = 0
@@ -46,8 +45,8 @@ struct CalculateView: View {
                     }
                     continue
                 }
-                // 야후 rest api를 사용하여 배당내역 받아옴
-                for d in yahooApi.getDividendData(ticker: stock.ticker) {
+
+                for d in stock.monthlyDiv {
                     if d.month != -1 {
                         sum[d.month] += d.dividend * Double(stock.number) * (currencyDic[stock.currency] ?? 1.0)
                     }
@@ -68,8 +67,8 @@ struct CalculateView: View {
                         .font(.system(size: 28))
                         .fontWeight(.heavy)
                     Picker(selection: $pickerSelected, label: Text("")) {
-                        Text(Constants.CalculateText.perMonth).tag(0)
-                        Text(Constants.CalculateText.perQuater).tag(1)
+                        Text(Constants.CalculateText.first).tag(0)
+                        Text(Constants.CalculateText.second).tag(1)
                     }.pickerStyle(SegmentedPickerStyle())
                         .padding(.horizontal)
                     

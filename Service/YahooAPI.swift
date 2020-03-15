@@ -11,8 +11,8 @@ class YahooAPI {
     let webService = WebService()
     let yahooData = YahooData()
     
-    func getData(ticker:String, number:String) -> Stock {
-        var divData: [DividendData]
+    func getData(ticker:String, number:String, filter: String) -> Stock {
+        var monthlyDiv: [DividendData]
         var presentValue = 0.0
         var dividend = 0.0
         var dividendRatio = ""
@@ -72,17 +72,18 @@ class YahooAPI {
         semaphore.wait(timeout: .now() + 3)
         
         if fail {
-            return yahooData.getData(ticker: ticker, number: number)
+            return yahooData.getData(ticker: ticker, number: number, filter: filter)
         }
         
-        divData = self.getDividendData(ticker: ticker)
+        monthlyDiv = self.getDividendData(ticker: ticker)
+        monthlyDiv = monthlyDiv.sorted()
         
-        for div in divData {
+        for div in monthlyDiv {
             dividend += div.dividend
         }
         dividendRatio = String(format:"%.2f", dividend / presentValue * 100) + "%"
         
-        return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number: num, volume: volume, per: per, exdividend: exdividend, currency: currency, longName: longName)
+        return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number: num, volume: volume, per: per, exdividend: exdividend, currency: currency, longName: longName, filter: filter, monthlyDiv: monthlyDiv)
     }
     
     func getIdentifier(currency: String) -> String {
@@ -169,19 +170,7 @@ class YahooAPI {
 
         let semaphore = DispatchSemaphore(value: 0)
         // "https://query1.finance.yahoo.com/v8/finance/chart/\(ticker)?symbol=\(ticker)&period1=\(start)&period2=\(end)&interval=1d&range=1mo
-        // "validRanges":[
-//        "1d",
-//        "5d",
-//        "1mo",
-//        "3mo",
-//        "6mo",
-//        "1y",
-//        "2y",
-//        "5y",
-//        "10y",
-//        "ytd",
-//        "max"
-//        ]
+        // "validRanges":["1d","5d","1mo","3mo","6mo","1y","2y","5y","10y","ytd","max"]
         if let url = URL(string: "https://query1.finance.yahoo.com/v8/finance/chart/\(ticker)?symbol=\(ticker)&interval=1d&range=1mo") {
             URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
                 if let data = data {

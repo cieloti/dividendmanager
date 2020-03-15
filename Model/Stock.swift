@@ -19,8 +19,10 @@ class Stock: Identifiable, Hashable, Codable {
     var exdividend: String
     var currency: String
     var longName: String
+    var filter: String
+    var monthlyDiv: [DividendData]
 
-    init(ticker: String, price: Double, dividend: Double, period: String, number:Int, volume:String, per:Double, exdividend:String, currency: String, longName: String) {
+    init(ticker: String, price: Double, dividend: Double, period: String, number:Int, volume:String, per:Double, exdividend:String, currency: String, longName: String, filter: String, monthlyDiv: [DividendData]) {
         self.ticker = ticker
         self.price = price
         self.dividend = dividend
@@ -35,34 +37,15 @@ class Stock: Identifiable, Hashable, Codable {
         self.exdividend = exdividend
         self.currency = currency
         self.longName = longName
+        self.filter = filter
+        self.monthlyDiv = monthlyDiv
     }
 
     static func == (lhs: Stock, rhs: Stock) -> Bool {
-        return lhs.ticker == rhs.ticker
+        return lhs.ticker == rhs.ticker && lhs.filter == rhs.filter
     }
 
     public func hash(into hasher: inout Hasher) {
          hasher.combine(ObjectIdentifier(self).hashValue)
-    }
-}
-
-struct StockView: View {
-    let stock: Stock
-
-    var body: some View {
-        HStack {
-            Text(stock.ticker)
-                .frame(width: 100, alignment: .leading)
-                .lineLimit(1)
-            Text(String(format: "%.2f", stock.price))
-                .frame(width: 80, alignment: .center)
-                .lineLimit(1)
-            Text(String(format: "%.2f", stock.dividend))
-                .frame(width: 80, alignment: .center)
-                .lineLimit(1)
-            Text("\(stock.number)")
-                .frame(width: 80, alignment: .center)
-                .lineLimit(1)
-        }
     }
 }

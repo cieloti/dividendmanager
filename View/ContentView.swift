@@ -25,12 +25,12 @@ struct ContentView: View {
                         Image(Constants.TabBarImageName.tabBar0)
                         Text("\(Constants.TabBarText.tabBar0)")
                     }).tag(0).environmentObject(stocks)
-                    
+
                     AssetView().tabItem({
                         Image(Constants.TabBarImageName.tabBar1)
                         Text("\(Constants.TabBarText.tabBar1)")
                     }).tag(1).environmentObject(stocks)
-                    
+
                     CalculateView().tabItem({
                         Image(Constants.TabBarImageName.tabBar2)
                         Text("\(Constants.TabBarText.tabBar2)")
@@ -41,7 +41,7 @@ struct ContentView: View {
 //            }
 //        }.onAppear(perform: authenticate)
     }
-    
+
     func authenticate() {
         let context = LAContext()
         var error: NSError?

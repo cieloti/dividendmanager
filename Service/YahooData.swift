@@ -9,7 +9,10 @@ import Foundation
 import SwiftSoup
 
 class YahooData {
-    func getData(ticker:String, number:String) -> Stock {
+    let month  = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    
+    func getData(ticker:String, number:String, filter: String) -> Stock {
+        var monthlyDiv = [DividendData]()
         var presentValue = 0.0
         var dividend = 0.0
         var dividendRatio = ""
@@ -17,6 +20,7 @@ class YahooData {
         var per = 0.0
         var exdividend = ""
         let num = Int(number) ?? 0
+        var index = -1
         
         if let url = URL(string:"https://finance.yahoo.com/quote/\(ticker)?p=\(ticker)") {
             do {
@@ -64,8 +68,14 @@ class YahooData {
                 print("url contents fail")
             }
         }
+        if let i:Int = self.month.firstIndex(of: String(exdividend.prefix(3))) {
+            index = i
+        } else {
+            index = -1
+        }
+        monthlyDiv.append(DividendData(month: index, dividend: dividend, currency:"KRW"))
 
-        return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number:num, volume:volume, per:per, exdividend: exdividend, currency: "KRW", longName: ticker)
+        return Stock(ticker: ticker, price: presentValue, dividend: dividend, period: dividendRatio, number:num, volume:volume, per:per, exdividend: exdividend, currency: "KRW", longName: ticker, filter: filter, monthlyDiv: monthlyDiv)
     }
     
     var start = Int(Date().addingTimeInterval(-31536000).timeIntervalSince1970)
@@ -73,7 +83,6 @@ class YahooData {
     
     func getDividendData(ticker:String) -> [DividendData] {
         var data = [DividendData]()
-        let month  = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         var index = -1
         var temp = 0.0
         
@@ -88,7 +97,7 @@ class YahooData {
                         let e1:Elements = try! element.getElementsByClass("Py(10px) Ta(start) Pend(10px)")
                         if e1.size() != 0 {
                             let str = String((try! e1.text()).split(separator: " ")[0])
-                            if let i:Int = month.firstIndex(of: str) {
+                            if let i:Int = self.month.firstIndex(of: str) {
                                 index = i
                             } else {
                                 index = -1

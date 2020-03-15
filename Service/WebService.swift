@@ -7,6 +7,7 @@
 //  Copyright © 2020 cieloti. All rights reserved.
 //
 import Foundation
+import SwiftSoup
 
 class WebService {
     func getCurrency(from: String, to: String) -> Double {
