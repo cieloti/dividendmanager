@@ -21,7 +21,6 @@ struct AssetView: View {
     @State private var buttonEnable = true
     @State private var isSideMenuOpen: Bool = false
     @State private var filter: String = "All"
-    @State private var filterStocks = [Stock]()
 
     let yahooApi = YahooAPI()
     let defaults = UserDefaults.standard
@@ -115,7 +114,7 @@ struct SideMenu: View {
     
     var body: some View {
         HStack {
-            SideMenuList(filter: self.$filter)
+            SideMenuList(filter: self.$filter, selectedList: "All")
                 .frame(width: self.width)
                 .offset(x: self.isOpen ? 0 : -self.width)
                 .animation(.default)
@@ -129,23 +128,45 @@ struct SideMenu: View {
 struct SideMenuList: View {
     var menuList = AssetSubMenuModel()
     @Binding var filter: String
+    @State var selectedList: String
     
     var body: some View {
         List {
             Text("모든 리스트").onTapGesture {
                 self.filter = "All"
+                self.selectedList = "All"
             }
+//            .listRowBackground(self.selectedList == "All" ? Color(UIColor.systemGroupedBackground) : Color(UIColor.systemBackground))
+                .listRowBackground(self.selectedList == "All" ? Color(UIColor.systemOrange) : Color(UIColor.systemGray))
             ForEach(menuList.menuItems, id:\.self) { menu in
                 Text(menu.list).onTapGesture {
                     self.filter = menu.list
+                    self.selectedList = menu.list
                 }
+//                .listRowBackground(self.selectedList == menu.list ? Color(UIColor.systemGroupedBackground) : Color(UIColor.systemBackground))
+                .listRowBackground(self.selectedList == menu.list ?  Color(UIColor.systemOrange) : Color(UIColor.systemGray))
             }
+
+            Spacer()
+                .listRowBackground(Color(UIColor.systemGray))
+            Spacer()
+            .listRowBackground(Color(UIColor.systemGray))
+            Spacer()
+            .listRowBackground(Color(UIColor.systemGray))
             Text("리스트 추가").onTapGesture {
                 self.alert()
             }
+            .listRowBackground(Color(UIColor.systemGray))
             Text("리스트 삭제").onTapGesture {
                 self.removeAlert()
             }
+            .listRowBackground(Color(UIColor.systemGray))
+            Spacer()
+            .listRowBackground(Color(UIColor.systemGray))
+            Spacer()
+            .listRowBackground(Color(UIColor.systemGray))
+            Spacer()
+            .listRowBackground(Color(UIColor.systemGray))
         }
     }
 

@@ -26,7 +26,7 @@ struct StockView: View {
         VStack(alignment: .leading) {
             HStack {
                 Text(" " + stock.ticker)
-                    .frame(width: 100, alignment: .leading)
+                    .frame(width: 101, alignment: .leading)
                     .lineLimit(1)
                 VStack {
                     HStack {

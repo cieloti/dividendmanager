@@ -5,6 +5,7 @@
 //  Created by cieloti on 2020/02/25.
 //  Copyright © 2020 cieloti. All rights reserved.
 //
+import UIKit
 import SwiftUI
 
 struct CalculateView: View {
@@ -15,7 +16,7 @@ struct CalculateView: View {
     @EnvironmentObject var stocks: Stocks
     let webService = WebService()
     let commonApi = CommonApi()
-    
+
     @State var pickerSelected = 0
     var currencyDic: [String : Double] = [:]
     let month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -59,6 +60,27 @@ struct CalculateView: View {
         }
     }
 
+    var filterData: [FilterData] {
+        get {
+            var ret = [FilterData]()
+            var b = false
+            for stock in stocks.items {
+                b = false
+                for i in ret {
+                    if i.list == stock.filter {
+                        print(stock.filter)
+                        i.sum += stock.dividend * Double(stock.number) * (currencyDic[stock.currency] ?? 1.0)
+                        b = true
+                    }
+                }
+                if !b {
+                    ret.append(FilterData(list: stock.filter, sum: stock.dividend * Double(stock.number) * (currencyDic[stock.currency] ?? 1.0)))
+                }
+            }
+            return ret
+        }
+    }
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -71,67 +93,30 @@ struct CalculateView: View {
                         Text(Constants.CalculateText.second).tag(1)
                     }.pickerStyle(SegmentedPickerStyle())
                         .padding(.horizontal)
-                    
-                    BarChart(calculate: calculate)
-                    Text(Constants.CalculateText.empty)
-                    Estimate(calculate: calculate)
-                    Text(Constants.CalculateText.empty)
+                    if self.pickerSelected == 0 { // 월별 배당금 차트
+                        BarChart(calculate: calculate)
+                        Text(Constants.CalculateText.empty)
+                        Estimate(calculate: calculate)
+                        Text(Constants.CalculateText.empty)
+                    } else {
+                        PieChartView(filterData: filterData)
+                        Text(Constants.CalculateText.empty)
+                        ForEach(filterData, id:\.self) { d in
+                            HStack {
+                                Text(d.list)
+                                Spacer()
+                                Text(String(format: "%.2f 원", d.sum))
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical,5)
+                        }
+                        Text(Constants.CalculateText.empty)
+                    }
                     Text("원 달러 환율 : " + String(format: "%g", (currencyDic["USD"] ?? 1.0)))
+                    Spacer()
                 }
             }
             .navigationBarTitle(Text(Constants.CalculateText.assetTotal + commonApi.getFormatString(c:divTotal)), displayMode: .inline)
-        }
-    }
-}
-
-// 월별 배당금 차트
-struct BarChart: View {
-    var calculate:[DividendData]
-
-    var max: Double {
-        get {
-            let ret = calculate.max {$0.dividend < $1.dividend}?.dividend ?? 0.0
-            return ret != 0.0 ? ret : 1.0
-
-        }
-    }
-    
-    var body: some View {
-        HStack {
-            ForEach(calculate, id:\.self) { c in
-                VStack {
-                    ZStack(alignment:.bottom) {
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 20, height: 200)
-                        Rectangle()
-                            .fill(Color.green)
-                            .frame(width: 20, height: CGFloat(c.dividend / (self.max / 200.0)))
-                    }
-                    Text("\(Calendar.current.shortMonthSymbols[c.month])")
-                        .font(.footnote)
-                        .frame(height: 20)
-                }
-            }
-        }
-    }
-}
-
-// 월별 배당금 예상금액
-struct Estimate: View {
-    var calculate:[DividendData]
-
-    var body: some View {
-        ForEach(calculate, id:\.self) { c in
-            HStack {
-                Text("\(Calendar.current.shortMonthSymbols[c.month])")
-                    .padding(.horizontal)
-                    .frame(width: 80, alignment: .leading)
-                Text("\(c.dividend, specifier:"%g")")
-                    .frame(width: 80, alignment: .leading)
-                Text("원")
-                Spacer()
-            }
         }
     }
 }
@@ -143,3 +128,22 @@ struct CalculateView_Previews: PreviewProvider {
     }
 }
 #endif
+
+class FilterData: Identifiable, Hashable {
+    var id: String = UUID().uuidString
+    var list: String
+    var sum: Double
+
+    init(list: String, sum: Double) {
+        self.list = list
+        self.sum = sum
+    }
+
+    static func == (lhs: FilterData, rhs: FilterData) -> Bool {
+        return lhs.list == rhs.list
+    }
+
+    public func hash(into hasher: inout Hasher) {
+         hasher.combine(list + "filterdata")
+    }
+}
